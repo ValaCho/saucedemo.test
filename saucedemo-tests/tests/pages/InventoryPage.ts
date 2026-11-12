@@ -7,6 +7,8 @@ export class InventoryPage {
     private itemTitle: Locator;
     private cart: Locator;
     public cartItem: Locator;
+    public cartItemCount: Locator;
+    public emptyCart: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -15,6 +17,8 @@ export class InventoryPage {
         this.itemTitle = page.locator('.inventory_item_name');
         this.cart = page.locator('.shopping_cart_link');
         this.cartItem = page.locator('.cart_item');
+        this.cartItemCount = page.locator('.shopping_cart_link')
+        this.emptyCart = page.locator('[aria-label="Cart, empty"]');
     }
 
     async openCart() {

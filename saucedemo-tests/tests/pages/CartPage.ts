@@ -5,16 +5,22 @@ export class CartPage {
 
     checkoutButton: Locator;
     continueShoppingButton: Locator;
+    cartItem: Locator;
 
     constructor(page: Page) {
         this.page = page;
 
         this.checkoutButton = page.locator('[data-test="checkout"]');
         this.continueShoppingButton = page.locator('[data-test="continue-shopping"]');
+        this.cartItem = page.locator('.cart_item');
     }
 
     async checkout() {
         await this.checkoutButton.click();
+    }
+    
+    async getItemsCount(): Promise<number> {
+        return await this.cartItem.count();
     }
 
     async continueShopping() {
