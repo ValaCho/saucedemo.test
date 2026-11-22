@@ -7,6 +7,11 @@ import { CheckoutStepOnePage } from "../pages/CheckoutStepOnePage";
 import { CheckoutStepTwoPage } from "../pages/CheckoutStepTwoPage";
 import { users } from "../test-data/users";
 
+type User = {
+  userName: string;
+  password: string;
+};
+
 type MyFixtures = {
   loginPage: LoginPage;
   inventoryPage: InventoryPage;
@@ -14,8 +19,8 @@ type MyFixtures = {
   checkoutStepOnePage: CheckoutStepOnePage;
   checkoutStepTwoPage: CheckoutStepTwoPage;
 
-  standardUser: void;
-  invalidUser: void;
+  user: User;
+  autoLogin: void;
   logout: void;
 };
 
@@ -23,8 +28,6 @@ export const test = base.extend<MyFixtures>({
   // Page Objects
   loginPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
-
-    await page.goto("/");
 
     await use(loginPage);
   },
@@ -53,29 +56,28 @@ export const test = base.extend<MyFixtures>({
     await use(checkoutStepTwoPage);
   },
 
-  // Authenticated users
-  standardUser: async ({ page }, use) => {
-    const loginPage = new LoginPage(page);
-
-    await loginPage.login(
-      users.standardUser.userName,
-      users.standardUser.password,
-    );
-
-    await use();
+  // Selected user
+  user: async ({}, use) => {
+    await use(users.standardUser);
   },
 
-  invalidUser: async ({ page }, use) => {
-    const loginPage = new LoginPage(page);
+  // Automatic login
+  autoLogin: [
+    async ({ page, loginPage, user }, use) => {
 
-    await loginPage.login(
-      users.invalidUser.userName,
-      users.invalidUser.password,
-    );
+      await page.goto('/');
 
-    await use();
-  },
+      await loginPage.login(
+        user.userName,
+        user.password
+      );
 
+      await use();
+    },
+    { auto: true }
+  ],
+
+    // Automatic logout
     logout: [
     async ({ page }, use) => {
 

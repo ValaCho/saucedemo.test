@@ -5,7 +5,7 @@ export const users = {
   },
 
   invalidUser: {
-    userName: 'admin@test.com',
+    userName: 'locked_out_user',
     password: 'Admin123!'
   }
 };
